@@ -1,9 +1,11 @@
 import argparse
+import logging
 import pyttsx3
+import sys
 
 from bot import ChatBot
 from wikipedia_index import WikipediaIndex
-from local_llm import LocalLLM, mistral_7b
+from local_llm import LocalLLM, mistral_7b, llama2_7B_chat, microsoft_dialogpt_medium
 
 index_args = ['wikipedia', 'confluence']
 
@@ -28,20 +30,20 @@ def get_args() -> argparse.Namespace:
     parser.add_argument("--speech", help="Use speech synthesis to read responses out loud.", required=False, action='store_true')
     return parser.parse_args()
 
-def main():
-    args = get_args()
-    index = get_index_from_args(args)
-
+def main(args: argparse.Namespace):
     llm = None
     if args.openai != True:
-        print("[*] OpenAI not enabled, initializing local LLM")
-        llm = LocalLLM(model=mistral_7b)
-        llm.initialize_llm();
-    chat_bot = ChatBot(llm, index)
+        logging.info("OpenAI not enabled, initializing local LLM")
+        llm = LocalLLM(model=llama2_7B_chat)
+        llm.initialize_llm(use_gpu=False);
+    
+    chat_bot = ChatBot(llm)
+    index = get_index_from_args(args)
+    chat_bot.set_index(index)
 
     speech_engine = None
     if args.speech == True:
-        print("[*] initializing speech engine")
+        logging.info("initializing speech engine")
         speech_engine = pyttsx3.init()
 
     print("\n[Enter query and press ENTER]\n")
@@ -55,4 +57,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    args = get_args()
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+    logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
+    main(args)

@@ -11,8 +11,9 @@ llama2_70B = "meta-llama/Llama-2-70b-hf"
 llama2_70B_chat = "meta-llama/Llama-2-70b-chat-hf"
 mixtral_8x7B_instruct = "mistralai/Mixtral-8x7B-Instruct-v0.1"
 mistral_7b = "mistralai/Mistral-7B-v0.1"
+microsoft_dialogpt_medium = "microsoft/DialoGPT-medium"
 
-default_llama2_model = llama2_13B_chat
+default_llama2_model = llama2_7B_chat
 default_system_prompt = """You are an AI assistant that answers questions in a friendly manner, based on the given source documents. Here are some rules you always follow:
 - Generate human readable output, avoid creating output with gibberish text.
 - Generate only the requested output, don't include any other language before or after the requested output.
@@ -29,7 +30,7 @@ class LocalLLM:
             )
         self.llm = None
         
-    def initialize_llm(self):
+    def initialize_llm(self, use_gpu: bool):
         self.llm = HuggingFaceLLM(
             context_window=4096,
             max_new_tokens=2048,
@@ -39,5 +40,5 @@ class LocalLLM:
             model_name=self.model,
             device_map="auto",
             # change these settings below depending on your GPU
-            model_kwargs={"torch_dtype": torch.float16, "load_in_8bit": True},
+            model_kwargs={"torch_dtype": torch.float16, "load_in_8bit": use_gpu},
             )
