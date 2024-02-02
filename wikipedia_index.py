@@ -5,11 +5,8 @@ __app_loader_name__ = 'WikipediaReader'
 
 class WikipediaIndex:
     def __init__(self):
-        self.index = None
         WikipediaReader = download_loader(__app_loader_name__)
         self.loader = WikipediaReader()
-        self.documents = None
-        self.index = None
 
     def load_wiki_pages(self, wiki_pages: list):
         self.documents = self.loader.load_data(pages=wiki_pages)

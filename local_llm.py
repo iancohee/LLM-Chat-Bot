@@ -9,11 +9,12 @@ llama2_13B = "meta-llama/Llama-2-13b-hf"
 llama2_13B_chat = "meta-llama/Llama-2-13b-chat-hf"
 llama2_70B = "meta-llama/Llama-2-70b-hf"
 llama2_70B_chat = "meta-llama/Llama-2-70b-chat-hf"
+codellama_7b_instruct = "codellama/CodeLlama-7b-Instruct-hf"
 mixtral_8x7B_instruct = "mistralai/Mixtral-8x7B-Instruct-v0.1"
 mistral_7b = "mistralai/Mistral-7B-v0.1"
 microsoft_dialogpt_medium = "microsoft/DialoGPT-medium"
 
-default_llama2_model = llama2_7B_chat
+default_llama2_model = codellama_7b_instruct
 default_system_prompt = """You are an AI assistant that answers questions in a friendly manner, based on the given source documents. Here are some rules you always follow:
 - Generate human readable output, avoid creating output with gibberish text.
 - Generate only the requested output, don't include any other language before or after the requested output.
